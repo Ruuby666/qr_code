@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key key}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -17,13 +18,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'QR Creator'),
+      home:  MyHomePage(title: 'QR Creator'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key key, this.title}) : super(key: key);
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -32,11 +33,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Color backgroundColor;
-  Color qrColor;
-  String qrString;
-  String opcionEye;
-  String optionQrSelected;
+  late Color backgroundColor;
+  late Color qrColor;
+  late String qrString;
+  late String opcionEye;
+  late String optionQrSelected;
 
   @override
   void initState() {
@@ -74,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       width: 330,
                       height: 330,
                     ),
-                    QrImage(
+                    QrImageView(
                       //data: 'https://drive.google.com/drive/folders/1abWBg3I_E2oDEsFeTmInuHsUU5h7epBU?usp=sharing',
                       data: qrString,
                       eyeStyle: QrEyeStyle(
