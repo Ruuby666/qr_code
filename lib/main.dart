@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home:  MyHomePage(title: 'QR Creator'),
+      home: MyHomePage(title: 'QR Creator'),
     );
   }
 }
@@ -38,6 +39,8 @@ class _MyHomePageState extends State<MyHomePage> {
   late String qrString;
   late String opcionEye;
   late String optionQrSelected;
+  late File? image;
+  late ImagePicker picker;
 
   @override
   void initState() {
@@ -86,6 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                       /// No funciona el eye Style si lo pongo de la misma manera que el dataModuleStyle
                       dataModuleStyle: QrDataModuleStyle(
+                        color: qrColor,
                         dataModuleShape: // es un if en flutter
                             optionQrSelected == 'Circle'
                                 ? QrDataModuleShape.circle
@@ -96,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       gapless: true,
                       foregroundColor: qrColor,
                       backgroundColor: Colors.transparent,
-                      embeddedImage: AssetImage('assets/img/logo.png'),
+                      embeddedImage: AssetImage('assets/img/moon.jpg'),
                       embeddedImageStyle: QrEmbeddedImageStyle(
                         size: Size(70, 70),
                       ),
@@ -228,7 +232,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         ],
                         onChanged: (nuevaOpcionSeleccionada) {
                           setState(() {
-                            optionQrSelected = nuevaOpcionSeleccionada;
+                            optionQrSelected =
+                                nuevaOpcionSeleccionada as String;
                           });
                         },
                       ),
@@ -237,20 +242,49 @@ class _MyHomePageState extends State<MyHomePage> {
                         padding: const EdgeInsets.only(top: 5.0),
                         child: DropdownButton(
                           value: opcionEye,
-                          items: [
+                          items: const [
                             DropdownMenuItem(
-                                child: Text("Square"), value: "Square"),
+                                value: "Square",
+                                child: Text("Square")
+                            ),
                             DropdownMenuItem(
-                              child: Text("Circle"),
                               value: "Circle",
+                              child: Text("Circle")
                             ),
                           ],
                           onChanged: (value) {
                             setState(() {
-                              opcionEye = value;
+                              opcionEye = value as String;
                             });
                           },
-                        )),
+                        ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          /*
+                        XFile? image = await picker.ImagePicker(source: ImageSource.gallery);
+                        if (image != null) {
+                          // Aquí puedes manejar la imagen seleccionada
+                          // La ruta de la imagen seleccionada estará en 'image.path'
+                        }*/
+
+                          XFile? pickedImage = await picker.pickImage(source: ImageSource.gallery);
+                          if (pickedImage != null) {
+                            setState(() {
+                              image = File(pickedImage.path);
+                            });
+                          }
+                        },
+                        child: Text('Seleccionar imagen de la galería'),
+                      ),
+                    ),
                   ],
                 ),
               ],
